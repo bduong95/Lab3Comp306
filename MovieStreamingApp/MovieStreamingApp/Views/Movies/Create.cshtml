@@ -1,0 +1,77 @@
+﻿@model MovieStreamingApp.Models.Movie
+
+@{
+    ViewData["Title"] = "Create a New Movie";
+}
+
+<h1>Create a New Movie</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Hidden MovieID Field -->
+            <input type="hidden" asp-for="MovieID" value="@Guid.NewGuid().ToString()" />
+
+            <!-- Title Field -->
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <!-- Genre Field -->
+            <div class="form-group">
+                <label asp-for="Genre" class="control-label"></label>
+                <input asp-for="Genre" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+
+            <!-- Director Field -->
+            <div class="form-group">
+                <label asp-for="Director" class="control-label"></label>
+                <input asp-for="Director" class="form-control" />
+                <span asp-validation-for="Director" class="text-danger"></span>
+            </div>
+
+            <!-- Release Time Field -->
+            <div class="form-group">
+                <label asp-for="ReleaseTime" class="control-label"></label>
+                <input asp-for="ReleaseTime" class="form-control" placeholder="YYYY-MM-DD" />
+                <span asp-validation-for="ReleaseTime" class="text-danger"></span>
+            </div>
+
+            <!-- Rating Field -->
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <!-- Comments Field -->
+            <div class="form-group">
+                <label asp-for="Comments" class="control-label"></label>
+                <textarea asp-for="Comments" class="form-control"></textarea>
+                <span asp-validation-for="Comments" class="text-danger"></span>
+            </div>
+
+            <!-- File Upload Field (Optional) -->
+            <div class="form-group">
+                <label for="movieFile" class="control-label">Upload Movie File (Optional)</label>
+                <input type="file" id="movieFile" name="movieFile" class="form-control" />
+            </div>
+
+            <!-- Submit Button -->
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

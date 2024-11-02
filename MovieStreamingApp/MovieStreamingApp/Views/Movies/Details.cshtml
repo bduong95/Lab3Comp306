@@ -1,0 +1,82 @@
+﻿@model MovieStreamingApp.Models.Movie
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<h1>Movie Details</h1>
+
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Director)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Director)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseTime) <!-- Display as string -->
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rating) / 10
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        @if (!string.IsNullOrEmpty(Model.FileUrl))
+        {
+            <dt class="col-sm-2">
+                Download Movie
+            </dt>
+            <dd class="col-sm-10">
+                <a href="@Model.FileUrl" class="btn btn-info" target="_blank">Download</a>
+            </dd>
+        }
+    </dl>
+</div>
+
+<!-- Show Edit/Delete only if the logged-in user is the owner -->
+@if (HttpContextAccessor.HttpContext.Session.GetInt32("UserId") == Model.OwnerId)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.MovieID" class="btn btn-primary">Edit</a> <!-- Use MovieID -->
+        |
+        <a asp-action="Delete" asp-route-id="@Model.MovieID" class="btn btn-danger">Delete</a> <!-- Use MovieID -->
+    </div>
+}
+
+<!-- Back to list link -->
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+

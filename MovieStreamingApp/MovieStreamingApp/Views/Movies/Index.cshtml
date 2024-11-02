@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MovieStreamingApp.Models.Movie>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<div class="container">
+    <h1 class="display-4 text-center">Movies</h1>
+    <p class="text-center">Explore the latest movies in our collection!</p>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Director</th>
+                <th>Release Time</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td>@movie.Genre</td>
+                    <td>@movie.Director</td>
+                    <td>@movie.ReleaseTime</td> <!-- Display as string -->
+                    <td>@movie.Rating / 10</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@movie.MovieID" class="btn btn-info btn-sm">Details</a> <!-- Use MovieID as route id -->
+                        <!-- Updated Download Button to Call the Download Action -->
+                        @if (!string.IsNullOrEmpty(movie.FileUrl))
+                        {
+                            <a asp-action="Download" asp-route-id="@movie.MovieID" class="btn btn-secondary btn-sm">Download</a>
+                        }
+
+                        <!-- Show Edit/Delete only if the logged-in user is the owner -->
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("UserId") == movie.OwnerId)
+                        {
+                            <a asp-action="Edit" asp-route-id="@movie.MovieID" class="btn btn-primary btn-sm">Edit</a> <!-- Use MovieID -->
+                            <a asp-action="Delete" asp-route-id="@movie.MovieID" class="btn btn-danger btn-sm">Delete</a> <!-- Use MovieID -->
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Show Create button only if the user is logged in -->
+@if (HttpContextAccessor.HttpContext.Session.GetInt32("UserId") != null)
+{
+    <div class="text-center">
+        <a asp-action="Create" class="btn btn-success">Add New Movie</a>
+    </div>
+}
