@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i6xRtTOFjLo=",
+  "dgSpecHash": "ZDkLAnYgHbk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Brian\\source\\repos\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
+  "projectFilePath": "C:\\Users\\Brian\\Desktop\\WorkingLab3\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Brian\\.nuget\\packages\\awssdk.core\\3.7.400.45\\awssdk.core.3.7.400.45.nupkg.sha512",
     "C:\\Users\\Brian\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.402.9\\awssdk.dynamodbv2.3.7.402.9.nupkg.sha512",

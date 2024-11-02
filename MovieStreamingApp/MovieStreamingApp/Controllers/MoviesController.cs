@@ -54,10 +54,7 @@ namespace MovieStreamingApp.Controllers
                 return NotFound();
             }
 
-            // Retrieve the file URL from DynamoDB
             var fileUrl = movie["FileUrl"].AsString();
-
-            // Return a redirect result to the file URL, making it downloadable
             return Redirect(fileUrl);
         }
 
@@ -85,7 +82,7 @@ namespace MovieStreamingApp.Controllers
             try
             {
                 movie.OwnerId = HttpContext.Session.GetInt32("UserId").GetValueOrDefault();
-                movie.Comments ??= ""; // Initialize Comments
+                movie.Comments ??= "";
 
                 if (movieFile != null && movieFile.Length > 0)
                 {
@@ -116,6 +113,29 @@ namespace MovieStreamingApp.Controllers
                 _logger.LogError(ex, "Error creating movie.");
                 return View(movie);
             }
+        }
+
+        // GET: Movies/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            var movie = await _dynamoDbService.GetMovieByIdAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View(new Movie
+            {
+                MovieID = movie["MovieID"],
+                Title = movie["Title"],
+                Genre = movie["Genre"],
+                Director = movie["Director"],
+                ReleaseTime = movie.ContainsKey("ReleaseTime") ? movie["ReleaseTime"].AsString() : "",
+                Rating = movie.ContainsKey("Rating") ? Convert.ToInt32(movie["Rating"]) : 0,
+                FileUrl = movie.ContainsKey("FileUrl") ? movie["FileUrl"].AsString() : "",
+                Comments = movie.ContainsKey("Comments") ? movie["Comments"].AsString() : "",
+                OwnerId = Convert.ToInt32(movie["OwnerId"])
+            });
         }
 
         // GET: Movies/Edit/5
@@ -161,7 +181,7 @@ namespace MovieStreamingApp.Controllers
             try
             {
                 updatedMovie.MovieID = id;
-                updatedMovie.OwnerId = Convert.ToInt32(existingMovie["OwnerId"]); // Ensure OwnerId is preserved
+                updatedMovie.OwnerId = Convert.ToInt32(existingMovie["OwnerId"]);
                 await _dynamoDbService.UpdateMovieAsync(updatedMovie);
                 return RedirectToAction(nameof(Index));
             }
@@ -195,30 +215,6 @@ namespace MovieStreamingApp.Controllers
             });
         }
 
-        // GET: Movies/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            var movie = await _dynamoDbService.GetMovieByIdAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            return View(new Movie
-            {
-                MovieID = movie["MovieID"],
-                Title = movie["Title"],
-                Genre = movie["Genre"],
-                Director = movie["Director"],
-                ReleaseTime = movie.ContainsKey("ReleaseTime") ? movie["ReleaseTime"].AsString() : "",
-                Rating = movie.ContainsKey("Rating") ? Convert.ToInt32(movie["Rating"]) : 0,
-                FileUrl = movie.ContainsKey("FileUrl") ? movie["FileUrl"].AsString() : "",
-                Comments = movie.ContainsKey("Comments") ? movie["Comments"].AsString() : "",
-                OwnerId = Convert.ToInt32(movie["OwnerId"])
-            });
-        }
-
-
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -232,6 +228,46 @@ namespace MovieStreamingApp.Controllers
 
             await _dynamoDbService.DeleteMovieAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ListByRating(int minRating)
+        {
+            var movieDocuments = await _dynamoDbService.GetMoviesByRatingAsync(minRating);
+
+            var movies = movieDocuments.Select(doc => new Movie
+            {
+                MovieID = doc["MovieID"],
+                Title = doc["Title"],
+                Genre = doc["Genre"],
+                Director = doc["Director"],
+                ReleaseTime = doc.ContainsKey("ReleaseTime") ? doc["ReleaseTime"].AsString() : "",
+                Rating = doc.ContainsKey("Rating") ? Convert.ToInt32(doc["Rating"]) : 0,
+                FileUrl = doc.ContainsKey("FileUrl") ? doc["FileUrl"].AsString() : "",
+                Comments = doc.ContainsKey("Comments") ? doc["Comments"].AsString() : "",
+                OwnerId = doc.ContainsKey("OwnerId") ? Convert.ToInt32(doc["OwnerId"]) : 0
+            }).ToList();
+
+            return View("Index", movies);
+        }
+
+        public async Task<IActionResult> ListByGenre(string genre)
+        {
+            var movieDocuments = await _dynamoDbService.GetMoviesByGenreAsync(genre);
+
+            var movies = movieDocuments.Select(doc => new Movie
+            {
+                MovieID = doc["MovieID"],
+                Title = doc["Title"],
+                Genre = doc["Genre"],
+                Director = doc["Director"],
+                ReleaseTime = doc.ContainsKey("ReleaseTime") ? doc["ReleaseTime"].AsString() : "",
+                Rating = doc.ContainsKey("Rating") ? Convert.ToInt32(doc["Rating"]) : 0,
+                FileUrl = doc.ContainsKey("FileUrl") ? doc["FileUrl"].AsString() : "",
+                Comments = doc.ContainsKey("Comments") ? doc["Comments"].AsString() : "",
+                OwnerId = doc.ContainsKey("OwnerId") ? Convert.ToInt32(doc["OwnerId"]) : 0
+            }).ToList();
+
+            return View("Index", movies);
         }
     }
 }

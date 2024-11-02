@@ -8260,11 +8260,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Brian\\source\\repos\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
+      "projectUniqueName": "C:\\Users\\Brian\\Desktop\\WorkingLab3\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
       "projectName": "MovieStreamingApp",
-      "projectPath": "C:\\Users\\Brian\\source\\repos\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
+      "projectPath": "C:\\Users\\Brian\\Desktop\\WorkingLab3\\MovieStreamingApp\\MovieStreamingApp\\MovieStreamingApp.csproj",
       "packagesPath": "C:\\Users\\Brian\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Brian\\source\\repos\\MovieStreamingApp\\MovieStreamingApp\\obj\\",
+      "outputPath": "C:\\Users\\Brian\\Desktop\\WorkingLab3\\MovieStreamingApp\\MovieStreamingApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Brian\\AppData\\Roaming\\NuGet\\NuGet.Config",
